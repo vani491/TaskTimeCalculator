@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/card_background"
+        android:layout_margin="8dp"
+        android:padding="10dp"
+        android:elevation="4dp"
+        android:translationZ="2dp">
+
+        <!-- Main Content Area -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/taskTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Movie Watching"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary_text"
+                android:layout_marginBottom="4dp" />
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/taskDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This is a sample description for the list item. You can add more details here about the order or item."
+                android:textSize="14sp"
+                android:textColor="@color/secondary_text"
+                android:lineSpacingMultiplier="1.2"
+                android:maxLines="3"
+                android:visibility="gone"
+                android:ellipsize="end" />
+
+        </LinearLayout>
+
+        <!-- Timer Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+
+            <!-- Timer Text -->
+            <TextView
+                android:id="@+id/tvTimer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total: 0 min"
+                android:textSize="16sp"
+                android:textColor="@color/timer_text"
+                android:textStyle="bold" />
+
+
+
+        </LinearLayout>
+
+
+    <!-- Button Container -->
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <!-- Edit Button -->
+            <TextView
+                android:id="@+id/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Edit"
+                android:textSize="12sp"
+                android:textColor="@color/edit_button_text"
+                android:background="@drawable/edit_button_background"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:elevation="2dp" />
+
+            <!-- Delete Button -->
+            <TextView
+                android:id="@+id/btn_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Delete"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:textColor="@color/delete_button_text"
+                android:background="@drawable/delete_button_background"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:minWidth="0dp"
+                android:elevation="2dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>
