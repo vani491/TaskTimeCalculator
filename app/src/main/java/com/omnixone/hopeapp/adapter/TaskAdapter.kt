@@ -1,6 +1,8 @@
 package com.omnixone.hopeapp.adapter
 
+import android.graphics.Color
 import android.text.format.DateUtils.formatElapsedTime
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,9 +23,10 @@ class TaskAdapter : ListAdapter<TaskEntity, TaskAdapter.TaskViewHolder>(DiffCall
     private var onDeleteClick: ((TaskEntity) -> Unit)? = null
     private var onTaskClick: ((TaskEntity) -> Unit)? = null
 
-    //Track selected task and elapsed time
-    private var selectedTaskUuid: String? = null
-    private var elapsedTime: Long = 0L
+    // This value will now represent only the live timer (start from 0)
+    private var runningTaskUuid: String? = null
+    private var runningTaskElapsed: Long = 0L
+
 
     private var taskTodayDurations: Map<Int, Long> = emptyMap()
 
@@ -41,10 +44,11 @@ class TaskAdapter : ListAdapter<TaskEntity, TaskAdapter.TaskViewHolder>(DiffCall
 
     //Update selected task and elapsed time
     fun updateSelectedTask(uuid: String?, elapsed: Long) {
-        selectedTaskUuid = uuid
-        elapsedTime = elapsed
-        notifyDataSetChanged() // refresh list
+        runningTaskUuid = uuid
+        runningTaskElapsed = elapsed
+        notifyDataSetChanged()
     }
+
 
     fun setTodayDurations(durations: Map<Int, Long>) {
         taskTodayDurations = durations
@@ -68,34 +72,58 @@ class TaskAdapter : ListAdapter<TaskEntity, TaskAdapter.TaskViewHolder>(DiffCall
             binding.taskTitle.text = task.title
             binding.taskDescription.text = task.description
 
-            // Show time for selected task or today's total
             val context = binding.root.context
-            val taskUuid = task.uuid.toString()
+            val isRunning = task.uuid.toString() == runningTaskUuid
+            //Log.e("WANT", "Is Running : $isRunning runningTaskUuid : $runningTaskUuid")
 
-            // Show timer only for selected task
-            if (taskUuid == selectedTaskUuid) {
-                // Timer running for this task
-                binding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.edit_button))
-                binding.tvTimer.text = formatElapsedTime(elapsedTime)
+           /* // Set background
+            binding.root.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    if (isRunning) R.color.edit_button_text else R.color.white
+                )
+            )*/
+
+            // Set background using drawable
+            binding.root.setBackgroundResource(
+                if (isRunning) R.drawable.active_card_background else R.drawable.non_active_background
+            )
+
+            // Always show total time
+            val total = taskTodayDurations[task.uuid] ?: 0L
+            binding.tvTotalTimer.text = "${formatElapsedTime(total)}"
+
+            // Show running time if selected
+            if (isRunning) {
+                binding.tvTimer.visibility = View.VISIBLE
+                binding.tvTimer.text = "${formatElapsedTime(runningTaskElapsed)}"
+
+                binding.taskTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
+                binding.tvTotalTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
+                binding.tvTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
+
+
             } else {
-                // Show today's total time
-                binding.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
-                binding.tvTimer.text = formatElapsedTime(taskTodayDurations[task.uuid] ?: 0L)
+                binding.tvTimer.visibility = View.INVISIBLE
+                binding.taskTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.secondary_text))
+                binding.tvTotalTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.secondary_text))
+                binding.tvTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.secondary_text))
+
+
             }
 
-            binding.tvTimer.visibility = View.VISIBLE
+
 
             binding.root.setOnClickListener {
                 onTaskClick?.invoke(task)
             }
 
-            binding.btnEdit.setOnClickListener {
+            binding.root.setOnLongClickListener {
                 onEditClick?.invoke(task)
+                true
             }
 
-            binding.btnDelete.setOnClickListener {
-                onDeleteClick?.invoke(task)
-            }
+
         }
 
 

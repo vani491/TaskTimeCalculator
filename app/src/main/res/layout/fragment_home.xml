@@ -17,8 +17,8 @@
             android:id="@+id/firstQuote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Progress over perfection - every small step counts."
-            android:textStyle="italic"
+            android:text="You're not hungry enough"
+            android:textStyle="normal"
             android:textSize="20dp"
             android:layout_margin="5dp"
             android:textColor="#E91E63"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your future self is counting on what you do today."
-            android:textStyle="italic"
+            android:textStyle="normal"
             android:textSize="20dp"
             android:layout_margin="5dp"
             android:textColor="#00BCD4"
@@ -45,18 +45,22 @@
             android:layout_below="@+id/secondQuote"
             android:layout_marginTop="4dp"
             android:layout_weight="1"
+
             android:paddingBottom="16dp"
             android:layout_marginBottom="45dp"
             tools:listitem="@layout/item_task" />
 
         <ImageView
             android:id="@+id/addTask"
+            android:layout_marginRight="15dp"
+            android:elevation="4dp"
+            android:translationZ="5dp"
             android:layout_marginTop="20dp"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="55dp"
+            android:layout_marginBottom="65dp"
             android:src="@drawable/add_icon"
             android:background="@drawable/edit_button_background"
 

@@ -2,6 +2,7 @@ package com.omnixone.hopeapp.ui.home
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,8 +71,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
-
     private fun setupClickListeners() {
 
         binding.addTask.setOnClickListener {
@@ -80,15 +79,14 @@ class HomeFragment : Fragment() {
 
         taskAdapter.setOnTaskClickListener { task ->
             taskViewModel.onTaskSelected(task)
+            //Immediately reflect UI change with 0L elapsed
+            //taskAdapter.updateSelectedTask(task.uuid.toString(), 0L)
         }
 
         taskAdapter.setOnEditClickListener { task ->
             showEditTaskDialog(task)
         }
 
-        taskAdapter.setOnDeleteClickListener { task ->
-            showDeleteConfirmationDialog(task)
-        }
     }
 
     // Observe tasks
@@ -99,7 +97,8 @@ class HomeFragment : Fragment() {
 
         // Observe timer and update selected task
         taskViewModel.elapsedTime.observe(viewLifecycleOwner) { elapsed ->
-            val selectedTaskUuid = taskViewModel.getSelectedTaskUuid() // We'll add this getter
+            val selectedTaskUuid = taskViewModel.getSelectedTaskUuid()
+            Log.e("HOPE","4. currentTaskUuid : $selectedTaskUuid")// We'll add this getter
             taskAdapter.updateSelectedTask(selectedTaskUuid, elapsed)
         }
 
@@ -119,14 +118,12 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-
-
-
     private fun showAddTaskDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_task, null)
+        val indexEditText = dialogView.findViewById<EditText>(R.id.editTextIndex)
         val titleEditText = dialogView.findViewById<EditText>(R.id.editTextTitle)
         val descEditText = dialogView.findViewById<EditText>(R.id.editTextDescription)
+        val totalHoursEditText = dialogView.findViewById<EditText>(R.id.editTextTotalHours)
 
         AlertDialog.Builder(requireContext())
             .setTitle("Add New Task")
@@ -134,18 +131,28 @@ class HomeFragment : Fragment() {
             .setPositiveButton("Add") { _, _ ->
                 val title = titleEditText.text.toString().trim()
                 val description = descEditText.text.toString().trim()
+                val indexStr = indexEditText.text.toString().trim()
+                val totalHoursStr = totalHoursEditText.text.toString().trim()
 
-                if (title.isNotEmpty()) {
-                    val newTask = TaskEntity(index = 1,title = title, description = description)
+                if (title.isNotEmpty() && indexStr.isNotEmpty() && totalHoursStr.isNotEmpty()) {
+                    val index = indexStr.toIntOrNull() ?: 0
+                    val totalHours = totalHoursStr.toIntOrNull() ?: 0
+
+                    val newTask = TaskEntity(
+                        index = index,
+                        title = title,
+                        description = description,
+                        totalHours = totalHours
+                    )
                     taskViewModel.insertTask(newTask)
                 } else {
-
-                    Toast.makeText(requireContext(), "Title is required", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "All fields are required", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
+
 
 
     private fun showEditTaskDialog(task: TaskEntity) {
@@ -174,20 +181,13 @@ class HomeFragment : Fragment() {
                 }
             }
             .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun showDeleteConfirmationDialog(task: TaskEntity) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Delete Task")
-            .setMessage("Are you sure you want to delete '${task.title}'?")
-            .setPositiveButton("Delete") { _, _ ->
+            .setNeutralButton("Delete") { _, _ ->
                 taskViewModel.delete(task)
                 Toast.makeText(requireContext(), "Task deleted", Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("Cancel", null)
             .show()
     }
+
 
 
 }

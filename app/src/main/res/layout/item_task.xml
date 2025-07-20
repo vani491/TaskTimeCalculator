@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/card_background"
+        android:background="@drawable/non_active_background"
         android:layout_margin="8dp"
         android:padding="10dp"
         android:elevation="4dp"
@@ -29,7 +29,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Movie Watching"
-                android:textSize="18sp"
+                android:textSize="22sp"
+                android:gravity="center"
                 android:textStyle="bold"
                 android:textColor="@color/primary_text"
                 android:layout_marginBottom="4dp" />
@@ -63,55 +64,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="Time: 0 min"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/timer_text"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/tvTotalTimer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Total: 0 min"
+                android:gravity="center"
                 android:textSize="16sp"
                 android:textColor="@color/timer_text"
-                android:textStyle="bold" />
-
-
-
-        </LinearLayout>
-
-
-    <!-- Button Container -->
-        <LinearLayout
-            android:visibility="gone"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end">
-
-            <!-- Edit Button -->
-            <TextView
-                android:id="@+id/btn_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="Edit"
-                android:textSize="12sp"
-                android:textColor="@color/edit_button_text"
-                android:background="@drawable/edit_button_background"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="center"
-                android:minWidth="0dp"
-                android:elevation="2dp" />
-
-            <!-- Delete Button -->
-            <TextView
-                android:id="@+id/btn_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="Delete"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:textColor="@color/delete_button_text"
-                android:background="@drawable/delete_button_background"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:minWidth="0dp"
-                android:elevation="2dp" />
+                android:textStyle="normal" />
 
         </LinearLayout>
 

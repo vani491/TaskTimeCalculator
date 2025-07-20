@@ -1,5 +1,6 @@
 package com.omnixone.hopeapp.viewmodel
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 
 import com.omnixone.hopeapp.db.entity.TaskEntity
@@ -11,6 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -34,12 +36,14 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
     // Called when user clicks a task
     fun onTaskSelected(task: TaskEntity) {
         //Stop previous task timer if different
+        Log.e("HOPE","1. currentTaskUuid : $currentTaskUuid")
         if (currentTaskUuid != null && currentTaskUuid != task.uuid) {
             stopAndSaveSession()
         }
 
         //Start new timer if no task running
         if (currentTaskUuid != task.uuid) {
+            Log.e("HOPE","2. currentTaskUuid : $currentTaskUuid")
             startNewSession(task)
         }
     }
@@ -51,6 +55,7 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
     // Start a new timer session
     private fun startNewSession(task: TaskEntity) {
         currentTaskUuid = task.uuid
+        Log.e("HOPE","3. currentTaskUuid : $currentTaskUuid")
         startTime = System.currentTimeMillis()
         //Get total time spent today from stored map
         baseElapsedTime = taskTodayDurations[task.uuid] ?: 0L
@@ -96,12 +101,11 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
                 taskTodayDurations[uuid] = total
             }
 
-            // ✅ Update UI on main thread
-            _elapsedTime.postValue(0L)
         }
 
         currentTimerJob?.cancel()
         currentTaskUuid = null
+        Log.e("HOPE","6. currentTaskUuid : $currentTaskUuid")
         startTime = 0L
         timerPref.clear()
     }
@@ -112,8 +116,8 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
         currentTimerJob?.cancel()
         currentTimerJob = viewModelScope.launch {
             while (isActive) {
-                val elapsed = System.currentTimeMillis() - startTime
-                _elapsedTime.postValue(baseElapsedTime +elapsed)
+
+                _elapsedTime.postValue(System.currentTimeMillis() - startTime)
                 delay(1000)
             }
         }
@@ -126,6 +130,7 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
 
         if (uuid != null && savedStartTime > 0L) {
             currentTaskUuid = uuid
+            Log.e("HOPE","7. currentTaskUuid : $currentTaskUuid")
             startTime = savedStartTime
 
             // ✅ Restore already worked time today from map
@@ -170,7 +175,9 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
             }
 
             //Notify adapter/UI (on main thread)
-            onLoaded()
+            withContext(Dispatchers.Main) {
+                onLoaded()
+            }
         }
     }
 
