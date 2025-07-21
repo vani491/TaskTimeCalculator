@@ -36,9 +36,10 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
     // Called when user clicks a task
     fun onTaskSelected(task: TaskEntity) {
         //Stop previous task timer if different
-        Log.e("HOPE","1. currentTaskUuid : $currentTaskUuid")
+        Log.e("Shivani","1. currentTaskUuid : $currentTaskUuid  TaskUUID : ${task.uuid}")
         if (currentTaskUuid != null && currentTaskUuid != task.uuid) {
-            stopAndSaveSession()
+            val tobeUpdateTaskID= currentTaskUuid
+            stopAndSaveSession(tobeUpdateTaskID)
         }
 
         //Start new timer if no task running
@@ -55,7 +56,7 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
     // Start a new timer session
     private fun startNewSession(task: TaskEntity) {
         currentTaskUuid = task.uuid
-        Log.e("HOPE","3. currentTaskUuid : $currentTaskUuid")
+        Log.e("UPDATE_LOG","New Task UUID Assign : Task UUID : $currentTaskUuid ")
         startTime = System.currentTimeMillis()
         //Get total time spent today from stored map
         baseElapsedTime = taskTodayDurations[task.uuid] ?: 0L
@@ -83,13 +84,15 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
     }
 
     // Stop and update previous session
-    private fun stopAndSaveSession() {
+    private fun stopAndSaveSession(taskUuid : Int?) {
+        Log.e("Shivani","Inside the method stopAndSaveSession : $currentTaskUuid")
         val endTime = System.currentTimeMillis()
         val duration = endTime - startTime
 
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateSessionEndTime(currentTaskUuid.toString()!!, endTime, duration)
-
+            repository.updateSessionEndTime(taskUuid.toString(), endTime, duration)
+            Log.e("UPDATE_LOG",
+                "Update the last Session : Task UUID : $taskUuid End Time : $endTime Duration : $duration")
             // ✅ Reload today durations after session saved
             val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             val todaySessions = repository.getSessionsByDate(today)

@@ -157,11 +157,16 @@ class HomeFragment : Fragment() {
 
     private fun showEditTaskDialog(task: TaskEntity) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_task, null)
+
         val titleEditText = dialogView.findViewById<EditText>(R.id.etTitle)
         val descriptionEditText = dialogView.findViewById<EditText>(R.id.etDescription)
+        val indexEditText = dialogView.findViewById<EditText>(R.id.etIndex)
+        val totalHoursEditText = dialogView.findViewById<EditText>(R.id.etTotalHours)
 
         titleEditText.setText(task.title)
         descriptionEditText.setText(task.description)
+        indexEditText.setText(task.index.toString())
+        totalHoursEditText.setText(task.totalHours.toString())
 
         AlertDialog.Builder(requireContext())
             .setTitle("Edit Task")
@@ -169,11 +174,15 @@ class HomeFragment : Fragment() {
             .setPositiveButton("Update") { _, _ ->
                 val title = titleEditText.text.toString().trim()
                 val description = descriptionEditText.text.toString().trim()
+                val index = indexEditText.text.toString().toIntOrNull() ?: 0
+                val totalHours = totalHoursEditText.text.toString().toIntOrNull() ?: 0
 
                 if (title.isNotEmpty()) {
                     val updatedTask = task.copy(
                         title = title,
-                        description = description
+                        description = description,
+                        index = index,
+                        totalHours = totalHours
                     )
                     taskViewModel.update(updatedTask)
                 } else {

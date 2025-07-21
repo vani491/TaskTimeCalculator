@@ -3,25 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <!-- Add your binding variables here if needed -->
     </data>
 
-    <LinearLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/non_active_background"
         android:layout_margin="8dp"
-        android:padding="10dp"
         android:elevation="4dp"
+        android:background="@drawable/non_active_background"
         android:translationZ="2dp">
+
+        <!-- Background Progress View -->
+        <View
+            android:id="@+id/progressBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/progress_fill_background"
+            android:layout_gravity="start"
+            android:alpha="0.7" />
 
         <!-- Main Content Area -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="12dp">
+            android:padding="10dp">
 
             <!-- Title -->
             <TextView
@@ -40,7 +48,7 @@
                 android:id="@+id/taskDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="This is a sample description for the list item. You can add more details here about the order or item."
+                android:text="This is a sample description"
                 android:textSize="14sp"
                 android:textColor="@color/secondary_text"
                 android:lineSpacingMultiplier="1.2"
@@ -48,40 +56,36 @@
                 android:visibility="gone"
                 android:ellipsize="end" />
 
-        </LinearLayout>
-
-        <!-- Timer Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="4dp">
-
-            <!-- Timer Text -->
-            <TextView
-                android:id="@+id/tvTimer"
-                android:layout_width="0dp"
+            <!-- Timer Section -->
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/timeLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Time: 0 min"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:textColor="@color/timer_text"
-                android:textStyle="normal" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
 
-            <TextView
-                android:id="@+id/tvTotalTimer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Total: 0 min"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:textColor="@color/timer_text"
-                android:textStyle="normal" />
+                <TextView
+                    android:id="@+id/tvTimer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Running: 00:00:00"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:textColor="@color/timer_text" />
 
+                <TextView
+                    android:id="@+id/tvTotalTimer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total: 00:00:00"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:textColor="@color/timer_text" />
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 </layout>

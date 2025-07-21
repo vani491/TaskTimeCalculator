@@ -17,6 +17,10 @@ interface TaskDao {
     @Query("SELECT * FROM tasks ORDER BY `index` ASC")
     fun getAllTasks(): Flow<List<TaskEntity>>
 
+
+    @Query("SELECT * FROM tasks ORDER BY `index` ASC")
+    fun getAllTask(): List<TaskEntity>
+
     @Update
     suspend fun updateTask(task: TaskEntity)
 

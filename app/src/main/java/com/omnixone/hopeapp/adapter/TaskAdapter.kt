@@ -74,20 +74,6 @@ class TaskAdapter : ListAdapter<TaskEntity, TaskAdapter.TaskViewHolder>(DiffCall
 
             val context = binding.root.context
             val isRunning = task.uuid.toString() == runningTaskUuid
-            //Log.e("WANT", "Is Running : $isRunning runningTaskUuid : $runningTaskUuid")
-
-           /* // Set background
-            binding.root.setBackgroundColor(
-                ContextCompat.getColor(
-                    context,
-                    if (isRunning) R.color.edit_button_text else R.color.white
-                )
-            )*/
-
-            // Set background using drawable
-            binding.root.setBackgroundResource(
-                if (isRunning) R.drawable.active_card_background else R.drawable.non_active_background
-            )
 
             // Always show total time
             val total = taskTodayDurations[task.uuid] ?: 0L
@@ -95,22 +81,46 @@ class TaskAdapter : ListAdapter<TaskEntity, TaskAdapter.TaskViewHolder>(DiffCall
 
             // Show running time if selected
             if (isRunning) {
-                binding.tvTimer.visibility = View.VISIBLE
+                binding.timeLayout.visibility = View.VISIBLE
                 binding.tvTimer.text = "${formatElapsedTime(runningTaskElapsed)}"
 
-                binding.taskTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
-                binding.tvTotalTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
-                binding.tvTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
+                binding.taskTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.black))
+                binding.tvTotalTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.black))
+                binding.tvTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.black))
 
 
             } else {
-                binding.tvTimer.visibility = View.INVISIBLE
-                binding.taskTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.secondary_text))
-                binding.tvTotalTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.secondary_text))
-                binding.tvTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.secondary_text))
+                binding.timeLayout.visibility = View.GONE
+
+                binding.taskTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.light_grey))
+                binding.tvTotalTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.light_grey))
+                binding.tvTimer.setTextColor(ContextCompat.getColor(binding.root.context, R.color.light_grey))
 
 
             }
+
+            val totalToday = taskTodayDurations[task.uuid] ?: 0L
+            val targetHours = task.totalHours ?: 0
+
+// Add running time if this is the selected task
+
+            val currentElapsed = if (isRunning) runningTaskElapsed else 0L
+
+            val effectiveTime = totalToday + currentElapsed
+
+            val percentFilled = if (targetHours > 0) {
+                (effectiveTime.toFloat() / TimeUnit.MINUTES.toMillis(targetHours.toLong())).coerceIn(0f, 1f)
+            } else 0f
+
+// Update progress view width
+            val backgroundView = binding.progressBackground
+            val parentWidth = (backgroundView.parent as View).width
+            val fillWidth = (parentWidth * percentFilled).toInt()
+
+            backgroundView.layoutParams.width = fillWidth
+            backgroundView.requestLayout()
+
+
 
 
 

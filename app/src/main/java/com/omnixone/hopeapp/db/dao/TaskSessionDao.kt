@@ -10,7 +10,7 @@ interface TaskSessionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSession(session: TaskSessionEntity)
 
-    // 🟡 Update session by taskUuid and latest startTime (find session with no endTime)
+    // Update session by taskUuid and latest startTime (find session with no endTime)
     @Query("""
         UPDATE task_sessions 
         SET endTime = :endTime, duration = :duration 
