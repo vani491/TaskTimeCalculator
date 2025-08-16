@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:elevation="4dp"
+        android:elevation="2dp"
         android:background="@drawable/non_active_background"
-        android:translationZ="2dp">
+        android:translationZ="1dp">
 
         <!-- Background Progress View -->
         <View

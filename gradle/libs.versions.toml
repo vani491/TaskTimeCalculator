@@ -16,7 +16,7 @@ room = "2.6.1"
 mpandroidchart = "3.1.0"
 cardview = "1.0.0"
 fragment = "1.6.2"
-
+work = "2.9.0"
 
 
 [libraries]
@@ -37,7 +37,7 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
 androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment" }
-
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

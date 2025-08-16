@@ -93,7 +93,7 @@ class TaskViewModel(private val repository: TaskRepository,  application: Applic
             repository.updateSessionEndTime(taskUuid.toString(), endTime, duration)
             Log.e("UPDATE_LOG",
                 "Update the last Session : Task UUID : $taskUuid End Time : $endTime Duration : $duration")
-            // ✅ Reload today durations after session saved
+            // Reload today durations after session saved
             val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             val todaySessions = repository.getSessionsByDate(today)
             val grouped = todaySessions.groupBy { it.taskUuid.toInt() }

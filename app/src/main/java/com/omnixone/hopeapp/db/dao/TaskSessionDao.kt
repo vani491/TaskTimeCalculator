@@ -6,7 +6,6 @@ import com.omnixone.hopeapp.db.entity.TaskSessionEntity
 
 @Dao
 interface TaskSessionDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSession(session: TaskSessionEntity)
 

@@ -63,4 +63,6 @@ dependencies {
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.fragment.ktx)
 
+    implementation(libs.androidx.work.runtime.ktx)
+
 }

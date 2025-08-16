@@ -22,6 +22,7 @@ import com.omnixone.hopeapp.adapter.TaskAdapter
 import com.omnixone.hopeapp.db.entity.TaskEntity
 import com.omnixone.hopeapp.repository.TaskRepository
 import com.omnixone.hopeapp.viewmodel.TaskViewModelFactory
+import org.json.JSONObject
 
 
 class HomeFragment : Fragment() {
@@ -54,11 +55,35 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         observeTasks()
         setupClickListeners()
-
+        //load random quotes
+        loadRandomQuote()
         // Resume timer if a task was running
         taskViewModel.resumeTimerIfRunning()
+    }
 
 
+
+
+
+    private fun loadRandomQuote() {
+        try {
+            // JSON file read
+            val json = resources.openRawResource(R.raw.quotes).bufferedReader().use { it.readText() }
+
+            // Parse करें
+            val jsonObject = JSONObject(json)
+            val quotesArray = jsonObject.getJSONArray("quotes")
+
+            // Random quote pick
+            val randomIndex = (0 until quotesArray.length()).random()
+            val randomQuote = quotesArray.getString(randomIndex)
+
+
+            binding.firstQuote.text = "\"$randomQuote\""
+
+        } catch (e: Exception) {
+            binding.firstQuote.text = "\"Push yourself, because no one else is going to do it for you.\""
+        }
     }
 
     private fun setupRecyclerView() {
@@ -112,6 +137,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        loadRandomQuote()
         taskViewModel.resumeTimerIfRunning()
         taskViewModel.loadTodayDurations {
             taskAdapter.setTodayDurations(taskViewModel.getTodayDurationsMap())
